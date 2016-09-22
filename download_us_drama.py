@@ -16,7 +16,7 @@ print '下载类型: ' + type
 
 type_list = ('ed2k', 'magnet')
 
-page = 1
+page = 1  # todo 分页
 url = "http://cili07.com/?topic_title3=%s&p=%d" % (key_words, page)
 
 res = requests.get(url)
