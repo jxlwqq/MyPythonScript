@@ -4,6 +4,7 @@
 # 下载美剧,命令行运行脚本时,必须带一个参数:剧名,第二个参数是下载类型,默认为ed2k(电驴)
 # 例如:
 # python download_us_drama.py 生活大爆炸 ed2k
+# 你需要做的是新建任务,然后粘贴,windows版本的迅雷应该会检测剪贴板,自动帮你新建任务
 
 import requests
 import sys
