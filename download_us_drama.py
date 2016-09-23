@@ -11,7 +11,6 @@ from lxml import etree
 import re
 import os
 
-
 key_words = sys.argv[1]
 if len(sys.argv) < 3:
     type = 'ed2k'
@@ -45,15 +44,17 @@ for i in range(1, int(max_page) + 1):
 print content
 if os.name == 'posix':  # macOS
     import subprocess
+
     # 将下载链接复制到系统剪贴板上
     process = subprocess.Popen('pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
     process.communicate(content.encode('utf-8'))
     # 启动迅雷app
-    os.system('open -a /Applications/Thunder.app') # 将 /Applications/Thunder.app 替换为本机迅雷的安装路径
+    os.system('open -a /Applications/Thunder.app')  # 将 /Applications/Thunder.app 替换为本机迅雷的安装路径
 elif os.name == 'nt':  # windowsOS
     import win32api
     import win32clipboard
     import win32con
+
     # 将下载链接复制到系统剪贴板上
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
