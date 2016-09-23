@@ -61,4 +61,3 @@ elif os.name == 'nt':  # windowsOS
     win32clipboard.CloseClipboard()
     # 启动迅雷app
     win32api.ShellExecute(0, 'open', '../path/thunder.exe', '', '', 1)  # 将第三个参数 '../path/thunder.exe' 替换为本机迅雷的安装路径
-    pass
