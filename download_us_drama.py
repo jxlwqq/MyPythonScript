@@ -9,6 +9,8 @@ import requests
 import sys
 from lxml import etree
 import re
+import os
+import subprocess
 
 key_words = sys.argv[1]
 if len(sys.argv) < 3:
@@ -31,10 +33,21 @@ else:
     pattern = re.compile('^\/\?topic_title3=.*?\&p=(\d)+$', re.S)
     max_page = re.findall(pattern, max_page_url[0])[0]
 
+content = ''
 for i in range(1, int(max_page) + 1):
     url = "http://cili07.com/?topic_title3=%s&p=%d" % (key_words, i)
     res = requests.get(url)
     tree = etree.HTML(res.text)
     nodes = tree.xpath('//dl[@class="list-item"]/dd/@%s' % type)
     for node in nodes:
-        print node
+        content += node + '\n'
+
+print content
+if os.name == 'posix':  # macOS
+    # 启动迅雷app
+    os.system('open -a /Applications/Thunder.app')
+    # 将下载链接复制到系统剪贴板上
+    process = subprocess.Popen('pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
+    process.communicate(content.encode('utf-8'))
+elif os.name == 'nt':  # windowsOS
+    pass
