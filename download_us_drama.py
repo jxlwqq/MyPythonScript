@@ -8,21 +8,33 @@
 import requests
 import sys
 from lxml import etree
+import re
 
 key_words = sys.argv[1]
+if len(sys.argv) < 3:
+    type = 'ed2k'
+else:
+    type = sys.argv[2]
+
 print '您将下载: ' + key_words
-type = sys.argv[2]
+type_list = ('ed2k', 'magnet')
+if type not in type_list:
+    type = 'ed2k'
 print '下载类型: ' + type
 
-type_list = ('ed2k', 'magnet')
+url = "http://cili07.com/?topic_title3=%s" % (key_words,)
+tree = etree.HTML(requests.get(url).text)
+max_page_url = tree.xpath('//div[@class="pages"]/a[last()]/@href')
+if len(max_page_url) == 0:
+    max_page = 1
+else:
+    pattern = re.compile('^\/\?topic_title3=.*?\&p=(\d)+$', re.S)
+    max_page = re.findall(pattern, max_page_url[0])[0]
 
-page = 1  # todo 分页
-url = "http://cili07.com/?topic_title3=%s&p=%d" % (key_words, page)
-
-res = requests.get(url)
-
-tree = etree.HTML(res.text)
-nodes = tree.xpath('//dl[@class="list-item"]/dd/@%s' % type)
-
-for node in nodes:
-    print node
+for i in range(1, int(max_page) + 1):
+    url = "http://cili07.com/?topic_title3=%s&p=%d" % (key_words, i)
+    res = requests.get(url)
+    tree = etree.HTML(res.text)
+    nodes = tree.xpath('//dl[@class="list-item"]/dd/@%s' % type)
+    for node in nodes:
+        print node
